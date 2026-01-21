@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ClearName{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --action-blue: #007bff;
+            --bg-white: #f8f9fa;
+        }
+        body {
+            background-color: var(--bg-white);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--action-blue) !important;
+        }
+        .hero-section {
+            padding-top: 20vh;
+            padding-bottom: 5vh;
+        }
+        /* Custom underline for active tab */
+        .nav-tabs .nav-link.active {
+            border-bottom: 3px solid var(--action-blue) !important;
+            color: var(--action-blue) !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/">ClearName</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="nav nav-tabs nav-justified w-100">
+                    <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#userGuideModal">User Guide</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#preferencesModal">Preferences</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active_page == 'favorites' %}active{% endif %}" href="/favorites">Favourites</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active_page == 'history' %}active{% endif %}" href="/history">History</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active_page == 'add' %}active{% endif %}" href="/add">Add Name</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <div class="modal fade" id="userGuideModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Guide</h5>
+                    <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" style="filter: invert(1) grayscale(100%) brightness(200%);"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li><strong>Search:</strong> Type a name and press “Enter”.</li>
+                        <li><strong>Listen:</strong> Click the speakerphone icon to play audio.</li>
+                        <li><strong>Favorites:</strong> Click the star icon to favourite a name.</li>
+                        <li><strong>History:</strong> View your recently played names in the History tab.</li>
+                        <li><strong>Customize:</strong> Use the “Add Name” feature for unique circumstances.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="preferencesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Preferences</h5>
+                    <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" style="filter: invert(1) grayscale(100%) brightness(200%);"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label class="form-label d-block fw-bold">Playback Voice</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="voice" id="maleVoice" checked>
+                            <label class="btn btn-outline-primary" for="maleVoice">Male</label>
+                            <input type="radio" class="btn-check" name="voice" id="femaleVoice">
+                            <label class="btn btn-outline-primary" for="femaleVoice">Female</label>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label d-block fw-bold">Display Mode</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="theme" id="lightMode" checked>
+                            <label class="btn btn-outline-secondary" for="lightMode">☀️ Light</label>
+                            <input type="radio" class="btn-check" name="theme" id="darkMode">
+                            <label class="btn btn-outline-secondary" for="darkMode">🌙 Dark</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <label for="speedRange" class="form-label fw-bold">Playback Speed</label>
+                            <span id="speedValue" class="badge bg-primary text-white">1.0x</span>
+                        </div>
+                        <input type="range" class="form-range" min="0.5" max="1.5" step="0.1" id="speedRange" value="1.0" 
+                               oninput="document.getElementById('speedValue').innerText = this.value + 'x'">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

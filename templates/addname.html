@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Add Custom Name - ClearName{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4">
+                <h2 class="fw-bold mb-4">➕ Add Custom Name</h2>
+                <p class="text-muted">Upload a unique pronunciation for a client or colleague.</p>
+                <hr>
+
+                <form action="/addname" method="POST" enctype="multipart/form-data">
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Siobhan" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phonetic" class="form-label fw-bold">Phonetic Spelling</label>
+                        <input type="text" class="form-control" id="phonetic" name="phonetic" placeholder="e.g. shiv-AWN">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="origin" class="form-label fw-bold">Origin</label>
+                        <input type="text" class="form-control" id="origin" name="origin" placeholder="e.g. Irish">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="audio_file" class="form-label fw-bold">Audio Pronunciation</label>
+                        <input class="form-control" type="file" id="audio_file" name="audio_file" accept="audio/*" required>
+                        <div class="form-text">Accepted formats: .mp3, .wav, .m4a</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="comments" class="form-label fw-bold">Additional Comments</label>
+                        <textarea class="form-control" id="comments" name="comments" rows="3" 
+                                placeholder="e.g. Client prefers a softer 'ch' sound, or notes on specific context..."></textarea>
+                        <div class="form-text">Optional: Any specific notes on how or when to use this pronunciation.</div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Save to Library</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

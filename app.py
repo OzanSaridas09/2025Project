@@ -1,12 +1,17 @@
 import os
 import sqlite3  
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from db import db_session
 
 app = Flask(__name__)
 
+app.secret_key = 'Come-Blood-Detail-Pine-Nation4-Since'
+
 UPLOAD_FOLDER = 'static/audio'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 @app.route('/', methods=['GET'])
 def index():

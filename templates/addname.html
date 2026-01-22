@@ -1,49 +1,53 @@
 {% extends "base.html" %}
 
-{% block title %}Add Custom Name - ClearName{% endblock %}
-
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm p-4">
-                <h2 class="fw-bold mb-4">➕ Add Custom Name</h2>
-                <p class="text-muted">Upload a unique pronunciation for a client or colleague.</p>
-                <hr>
+        <div class="col-md-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white p-4">
+                    <h2 class="mb-0">Add New Entry</h2>
+                    <p class="mb-0 small opacity-75">Fill in the details to expand the pronunciation library.</p>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/addname" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="mb-4">
+                            <label for="name" class="form-label fw-bold">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" name="name" id="name" class="form-control form-control-lg" placeholder="e.g. Siobhán" required>
+                        </div>
 
-                <form action="/addname" method="POST" enctype="multipart/form-data">
-                    
-                    <div class="mb-3">
-                        <label for="name" class="form-label fw-bold">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Siobhan" required>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="phonetic" class="form-label fw-bold">Phonetic Spelling</label>
+                                <input type="text" name="phonetic" id="phonetic" class="form-control" placeholder="e.g. Shiv-awn">
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="origin" class="form-label fw-bold">Origin/Language</label>
+                                <input type="text" name="origin" id="origin" class="form-control" placeholder="e.g. Irish">
+                            </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="phonetic" class="form-label fw-bold">Phonetic Spelling</label>
-                        <input type="text" class="form-control" id="phonetic" name="phonetic" placeholder="e.g. shiv-AWN">
-                    </div>
+                        <div class="mb-4">
+                            <label for="audio_file" class="form-label fw-bold">Pronunciation Audio</label>
+                            <div class="input-group">
+                                <input type="file" name="audio_file" id="audio_file" class="form-control" accept="audio/*">
+                            </div>
+                            <div class="form-text">Accepted formats: MP3, WAV, M4A</div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="origin" class="form-label fw-bold">Origin</label>
-                        <input type="text" class="form-control" id="origin" name="origin" placeholder="e.g. Irish">
-                    </div>
+                        <div class="mb-4">
+                            <label for="comments" class="form-label fw-bold">Usage Notes / Context</label>
+                            <textarea name="comments" id="comments" class="form-control" rows="3" placeholder="Any special tips for the client?"></textarea>
+                        </div>
 
-                    <div class="mb-4">
-                        <label for="audio_file" class="form-label fw-bold">Audio Pronunciation</label>
-                        <input class="form-control" type="file" id="audio_file" name="audio_file" accept="audio/*" required>
-                        <div class="form-text">Accepted formats: .mp3, .wav, .m4a</div>
-                    </div>
-                    <div class="mb-4">
-                        <label for="comments" class="form-label fw-bold">Additional Comments</label>
-                        <textarea class="form-control" id="comments" name="comments" rows="3" 
-                                placeholder="e.g. Client prefers a softer 'ch' sound, or notes on specific context..."></textarea>
-                        <div class="form-text">Optional: Any specific notes on how or when to use this pronunciation.</div>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Save to Library</button>
-                    </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                            <a href="/" class="btn btn-light px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">Save to Library</button>
+                        </div>
 
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

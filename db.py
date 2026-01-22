@@ -5,6 +5,7 @@ from contextlib import contextmanager
 @contextmanager
 def db_session(db_name):
     conn = sqlite3.connect(db_name)
+    conn.row_factory = sqlite3.Row
     try:
         # Everything before the 'yield' happens when you enter the 'with' block
         yield conn
@@ -38,7 +39,7 @@ def init_db():
     conn = get_db_connection()
     conn.execute('''
         CREATE TABLE IF NOT EXISTS names (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
             phonetic TEXT,
             origin TEXT,
@@ -50,6 +51,7 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
+
 if __name__ == "__main__":
     init_db()
     print("Database initialized successfully!")

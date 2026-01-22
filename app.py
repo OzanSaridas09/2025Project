@@ -1,6 +1,6 @@
 import os
 import sqlite3  
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from db import db_session
 
 app = Flask(__name__)
@@ -58,6 +58,7 @@ def addname():
             ''', (name, phonetic, origin, comments, filename))
             
         # 4. Redirect to the home page after success
+        flash(f"Successfully added {name}!", "success")
         return redirect(url_for('index'))
     
     # If it's a GET request, just show the form page
@@ -70,9 +71,6 @@ def favorites():
 @app.route('/history')
 def history():
     return render_template("history.html")
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 @app.route('/delete/<int:id>')
 def delete_name(id):
@@ -92,3 +90,6 @@ def delete_name(id):
         conn.execute("DELETE FROM names WHERE id = ?", (id,))
         
     return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)

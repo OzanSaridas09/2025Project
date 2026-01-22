@@ -22,33 +22,34 @@ def db_session(db_name):
         print("Connection closed.")
 # end of db_session
 
-def init_db():
-    """
-    Initializes the SQLite database by creating the necessary tables 
-    if they do not already exist.
-    """
-    # Use the 'instance/' folder path to keep the database separate from code
-    db_path = 'instance/names.db'
-    
-    with db_session(db_path) as conn:
-        conn.execute('''
-            CREATE TABLE IF NOT EXISTS names (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                phonetic TEXT,
-                origin TEXT,
-                comments TEXT,
-                audio_path TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-    print("Database tables created successfully.")
+DB_PATH = 'instance/names.db'
 
-if __name__ == "__main__":
-    import os
-    # Create the instance folder if it doesn't exist to prevent 'File Not Found' errors
+def get_db_connection():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_db():
+    # 1. Create the instance folder if it's missing
     if not os.path.exists('instance'):
         os.makedirs('instance')
-        print("Created 'instance' directory.")
-        
+    
+    # 2. Connect and create the table with the new columns
+    conn = get_db_connection()
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS names (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            phonetic TEXT,
+            origin TEXT,
+            audio_path TEXT,
+            comments TEXT,
+            is_favorite INTEGER DEFAULT 0,
+            last_viewed DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    conn.commit()
+    conn.close()
+if __name__ == "__main__":
     init_db()
+    print("Database initialized successfully!")

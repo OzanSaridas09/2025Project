@@ -1,7 +1,7 @@
 import os
 import sqlite3  
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from db import db_session
+from db import db_session, init_db, get_db_connection
 
 app = Flask(__name__)
 
@@ -20,18 +20,18 @@ def index():
     # 1. Open the DB Connection
     with db_session('instance/names.db') as conn:
         # 2. Convert rows to dictionaries so we can use name.name instead of name[1]
-        conn.row_factory = sqlite3.Row 
+        results = conn.execute("SELECT * FROM names ORDER BY id DESC").fetchall()
+    return render_template('index.html', names=results)
+    if query:
+        # Search Logic
+        results = conn.execute(
+            "SELECT * FROM names WHERE name LIKE ? ORDER BY created_at DESC", 
+            ('%' + query + '%',)
+        ).fetchall()
+    else:
+        # Default: Show recent 12 names
+        results = conn.execute("SELECT * FROM names ORDER BY created_at DESC LIMIT 12").fetchall()
         
-        if query:
-            # Search Logic
-            results = conn.execute(
-                "SELECT * FROM names WHERE name LIKE ? ORDER BY created_at DESC", 
-                ('%' + query + '%',)
-            ).fetchall()
-        else:
-            # Default: Show recent 12 names
-            results = conn.execute("SELECT * FROM names ORDER BY created_at DESC LIMIT 12").fetchall()
-            
     # 3. Send the 'results' list to the HTML template
     return render_template('index.html', names=results, query=query)
 

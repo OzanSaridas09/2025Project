@@ -54,7 +54,11 @@
                     <div class="mt-3">
                         <div class="audio-section mt-2">
                             <audio controls>
-                                <source src="{{ url_for('pronounce', name=name.name) }}" type="audio/mpeg">
+                                {% if name.audio_path %}
+                                    <source src="{{ url_for('static', filename='audio/' + name.audio_path) }}" type="audio/mpeg">
+                                {% else %}
+                                    <source src="{{ url_for('pronounce', name=name.name) }}?t={{ range(1, 99999) | random }}" type="audio/mpeg">
+                                {% endif %}
                                 Your browser does not support the audio element.
                             </audio>
                         </div>

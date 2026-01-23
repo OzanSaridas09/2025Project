@@ -34,14 +34,18 @@
                     <td><span class="badge bg-secondary">{{ item.origin }}</span></td>
                     <td>
                         <audio controls style="height: 30px;">
-                            <source src="{{ url_for('pronounce', name=item.name) }}" type="audio/mpeg">
+                            {% if item.audio_path %}
+                                <source src="{{ url_for('static', filename='audio/' + item.audio_path) }}" type="audio/mpeg">
+                            {% else %}
+                                <source src="{{ url_for('pronounce', name=item.name) }}" type="audio/mpeg">
+                            {% endif %}
                         </audio>
                     </td>
                     <td>
                         <a href="{{ url_for('toggle_favorite', id=item.id) }}" class="text-decoration-none">
                             {% if item.is_favorite %}<span style="color: gold;">★</span>{% else %}<span style="color: gray;">☆</span>{% endif %}
                         </a>
-                        <a href="#" class="ms-2 text-danger" style="text-decoration: none;">&times;</a>
+                        <a href="{{ url_for('delete_history', id=item.id) }}" class="ms-2 text-danger" style="text-decoration: none;">&times;</a>
                     </td>
                 </tr>
                 {% endfor %}

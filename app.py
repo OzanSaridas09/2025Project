@@ -95,6 +95,12 @@ def clear_history():
         conn.execute("UPDATE names SET last_viewed = NULL")
     return redirect(url_for('history'))
 
+@app.route('/delete_history/<int:id>')
+def delete_history(id):
+    with db_session('instance/names.db') as conn:
+        conn.execute("UPDATE names SET last_viewed = NULL WHERE id = ?", (id,))
+    return redirect(url_for('history'))
+
 @app.route('/delete/<int:id>')
 def delete_name(id):
     with db_session('instance/names.db') as conn:
@@ -122,13 +128,22 @@ def toggle_favorite(id):
 
 @app.route('/pronounce/<name>')
 def pronounce(name):
-    # This creates a "virtual file" in your computer's RAM 
-    # so you don't have to save 200 .mp3 files on your hard drive.
-    tts = gTTS(text=name, lang='en') 
+    # Get the voice from session, default to 'us' (Female)
+    # 'com.au' acts as the Male voice in gTTS
+    voice_tld = session.get('tts_voice', 'us')
+    
+    tts = gTTS(text=name, lang='en', tld=voice_tld)
     fp = io.BytesIO()
     tts.write_to_fp(fp)
     fp.seek(0)
     return send_file(fp, mimetype='audio/mpeg')
+
+@app.route('/preferences', methods=['POST'])
+def preferences():
+    session['theme'] = request.form.get('theme', 'light')
+    session['tts_speed'] = float(request.form.get('speed', 1.0))
+    session['tts_voice'] = request.form.get('voice', 'us')
+    return redirect(request.referrer or url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

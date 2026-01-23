@@ -71,7 +71,9 @@ def addname():
 
 @app.route('/favorites')
 def favorites():
-    return render_template("favorites.html")
+    with db_session('instance/names.db') as conn:
+        fav_names = conn.execute('SELECT * FROM names WHERE is_favorite = 1').fetchall()
+        return render_template("index.html", names=fav_names, title='Favorited Names')
 
 @app.route('/history')
 def history():
@@ -95,6 +97,13 @@ def delete_name(id):
         conn.execute("DELETE FROM names WHERE id = ?", (id,))
         
     return redirect(url_for('index'))
+
+@app.route('/toggle_favorite/<int:id>')
+def toggle_favorite(id):
+    with db_session('instance/names.db') as conn:
+        conn.execute("UPDATE names SET is_favorite = 1-is_favorite WHERE id = ?", (id,))
+    return redirect(request.referrer or url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -52,14 +52,12 @@
                         {% endif %} </a>
                     
                     <div class="mt-3">
-                        {% if name.audio_path %}
-                            <audio controls class="w-100">
-                                <source src="{{ url_for('static', filename='audio/' + name.audio_path) }}" type="audio/mpeg">
+                        <div class="audio-section mt-2">
+                            <audio controls>
+                                <source src="{{ url_for('pronounce', name=name.name) }}" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>
-                        {% else %}
-                            <span class="text-muted small">No audio recorded</span>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer bg-transparent border-top-0 text-muted small">

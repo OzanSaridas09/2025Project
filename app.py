@@ -1,6 +1,8 @@
 import os
-import sqlite3  
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+import sqlite3 
+import io 
+from gtts import gTTS
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
 from db import db_session, init_db, get_db_connection
 
 app = Flask(__name__)
@@ -99,6 +101,15 @@ def toggle_favorite(id):
         conn.execute("UPDATE names SET is_favorite = 1-is_favorite WHERE id = ?", (id,))
     return redirect(request.referrer or url_for('index'))
 
+@app.route('/pronounce/<name>')
+def pronounce(name):
+    # This creates a "virtual file" in your computer's RAM 
+    # so you don't have to save 200 .mp3 files on your hard drive.
+    tts = gTTS(text=name, lang='en') 
+    fp = io.BytesIO()
+    tts.write_to_fp(fp)
+    fp.seek(0)
+    return send_file(fp, mimetype='audio/mpeg')
 
 if __name__ == '__main__':
     app.run(debug=True)

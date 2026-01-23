@@ -73,7 +73,7 @@ def addname():
 def favorites():
     with db_session('instance/names.db') as conn:
         fav_names = conn.execute('SELECT * FROM names WHERE is_favorite = 1').fetchall()
-        return render_template("index.html", names=fav_names, title='Favorited Names')
+        return render_template("index.html", names=fav_names, title='Favorited Names', page_type='favorites')
 
 @app.route('/history')
 def history():

@@ -13,27 +13,22 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    query = request.args.get('search')
-    
-    # 1. Open the DB Connection
-    with db_session('instance/names.db') as conn:
-        # 2. Convert rows to dictionaries so we can use name.name instead of name[1]
-        results = conn.execute("SELECT * FROM names ORDER BY id DESC").fetchall()
-    return render_template('index.html', names=results)
-    if query:
-        # Search Logic
-        results = conn.execute(
-            "SELECT * FROM names WHERE name LIKE ? ORDER BY created_at DESC", 
-            ('%' + query + '%',)
-        ).fetchall()
+    # 1. Grab the search term from the URL
+    search_query = request.args.get('search', '')
+
+    # 2. Decide what to show
+    if search_query:
+        with db_session('instance/names.db') as conn:
+            # Look for names that match
+            results = conn.execute("SELECT * FROM names WHERE name LIKE ?", ('%' + search_query + '%',)).fetchall()
     else:
-        # Default: Show recent 12 names
-        results = conn.execute("SELECT * FROM names ORDER BY created_at DESC LIMIT 12").fetchall()
-        
-    # 3. Send the 'results' list to the HTML template
-    return render_template('index.html', names=results, query=query)
+        # Show nothing on the home page by default
+        results = []
+
+    # 3. Send the results to the HTML
+    return render_template('index.html', names=results, search_query=search_query)
 
 @app.route('/addname', methods=['GET', 'POST'])
 def addname():

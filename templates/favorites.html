@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}My Favorites - ClearName{% endblock %}
+
+{% block content %}
+<div class="container favorites-container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold mt-2">⭐ Favorites</h2>
+        </div>
+        <span class="badge bg-primary rounded-pill">3 Favorited Names</span>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        
+        <div class="col" id="fav-card-1">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="fw-bold fs-5">Siobhan</span>
+                        <span class="star-active" style="color: #ffc107; cursor: pointer; font-size: 1.5rem;" title="Unfavorite">★</span>
+                    </div>
+                    <p class="text-muted small">Added on: Jan 20, 2026</p>
+                    <button class="btn btn-primary w-100 mt-2" style="background-color: var(--action-blue); border-radius: 50px;">
+                        <span>▶ Play Audio</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col" id="fav-card-2">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="fw-bold fs-5">Nguyen</span>
+                        <span class="star-active" style="color: #ffc107; cursor: pointer; font-size: 1.5rem;" title="Unfavorite">★</span>
+                    </div>
+                    <p class="text-muted small">Added on: Jan 18, 2026</p>
+                    <button class="btn btn-primary w-100 mt-2" style="background-color: var(--action-blue); border-radius: 50px;">
+                        <span>▶ Play Audio</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col" id="fav-card-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="fw-bold fs-5">Alejandro</span>
+                        <span class="star-active" style="color: #ffc107; cursor: pointer; font-size: 1.5rem;" title="Unfavorite">★</span>
+                    </div>
+                    <p class="text-muted small">Added on: Jan 15, 2026</p>
+                    <button class="btn btn-primary w-100 mt-2" style="background-color: var(--action-blue); border-radius: 50px;">
+                        <span>▶ Play Audio</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="text-center py-5 d-none">
+        <h3 class="text-muted">No favorites yet.</h3>
+        <p>Click the star on any name to see it here!</p>
+        <a href="/" class="btn btn-outline-primary">Search Names</a>
+    </div>
+</div>
+{% endblock %}

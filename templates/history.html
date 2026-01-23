@@ -1,52 +1,52 @@
 {% extends "base.html" %}
-
-{% block title %}Playback History - ClearName{% endblock %}
-
-{% block extra_css %}
-<style>
-    .history-container { margin-top: 50px; margin-bottom: 50px; }
-    .table-card { border-radius: 15px; overflow: hidden; }
-    .btn-delete { color: #dc3545; cursor: pointer; transition: 0.2s; }
-    .btn-delete:hover { color: #a71d2a; transform: scale(1.1); }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container history-container">
+<div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mt-2">Playback History</h2>
-        </div>
-        <button class="btn btn-outline-danger btn-sm">Clear All History</button>
+        <h2>Search History</h2>
+        <a href="{{ url_for('clear_history') }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Clear all history?')">Clear All History</a>
     </div>
 
-    <div class="card table-card border-0 shadow-sm">
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Name</th>
-                        <th>Date & Time</th>
-                        <th>Phonetic</th>
-                        <th>Origin</th>
-                        <th class="text-end pe-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="row-1">
-                        <td class="ps-4 fw-bold">Siobhan</td>
-                        <td>Jan 21, 2026 - 4:30 PM</td>
-                        <td>shiv-AWN</td>
-                        <td>Irish</td>
-                        <td class="text-end pe-4">
-                            <span class="btn" title="Play audio">🔊</span>
-                            <span class="btn" title="Favorite name">⭐</span>
-                            <span class="btn-delete ms-2" title="Delete from history">🗑️</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <form action="{{ url_for('history') }}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search your history..." value="{{ search_query }}">
+            <button class="btn btn-primary" type="submit">Search</button>
         </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Time</th>
+                    <th>Name</th>
+                    <th>Phonetic</th>
+                    <th>Origin</th>
+                    <th>Audio</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                <tr>
+                    <td><small class="text-muted">{{ item.last_viewed }}</small></td>
+                    <td><strong>{{ item.name }}</strong></td>
+                    <td><small class="text-info">{{ item.phonetic or '-' }}</small></td>
+                    <td><span class="badge bg-secondary">{{ item.origin }}</span></td>
+                    <td>
+                        <audio controls style="height: 30px;">
+                            <source src="{{ url_for('pronounce', name=item.name) }}" type="audio/mpeg">
+                        </audio>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('toggle_favorite', id=item.id) }}" class="text-decoration-none">
+                            {% if item.is_favorite %}<span style="color: gold;">★</span>{% else %}<span style="color: gray;">☆</span>{% endif %}
+                        </a>
+                        <a href="#" class="ms-2 text-danger" style="text-decoration: none;">&times;</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

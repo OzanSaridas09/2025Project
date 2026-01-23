@@ -24,6 +24,7 @@ def index():
     if search_query:
         with db_session('instance/names.db') as conn:
             # Look for names that match
+            conn.execute("UPDATE names SET last_viewed = CURRENT_TIMESTAMP WHERE name LIKE ?",('%' + search_query + '%',))
             results = conn.execute("SELECT * FROM names WHERE name LIKE ?", ('%' + search_query + '%',)).fetchall()
     else:
         # Show nothing on the home page by default
@@ -74,7 +75,25 @@ def favorites():
 
 @app.route('/history')
 def history():
-    return render_template("history.html")
+    search_query = request.args.get('search', '')
+    with db_session('instance/names.db') as conn:
+        if search_query:
+            history_results = conn.execute(
+                "SELECT * FROM names WHERE last_viewed IS NOT NULL AND name LIKE ? ORDER BY last_viewed DESC", 
+                ('%' + search_query + '%',)
+            ).fetchall()
+        else:
+            history_results = conn.execute(
+                "SELECT * FROM names WHERE last_viewed IS NOT NULL ORDER BY last_viewed DESC"
+            ).fetchall()
+            
+    return render_template('history.html', history=history_results, search_query=search_query)
+
+@app.route('/clear_history')
+def clear_history():
+    with db_session('instance/names.db') as conn:
+        conn.execute("UPDATE names SET last_viewed = NULL")
+    return redirect(url_for('history'))
 
 @app.route('/delete/<int:id>')
 def delete_name(id):
